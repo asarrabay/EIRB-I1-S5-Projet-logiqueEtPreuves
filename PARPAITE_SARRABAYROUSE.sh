@@ -67,8 +67,11 @@ placement_2() {
 }
 
 
+# verification_contrainte
+# E :
 # $1 = Contrainte
 # $2 = Position
+# S : vide, arrete l'execution du script si une contrainte passée en paramètre est invalide
 verification_contrainte() {
     for i in 00 NS EW SW NE Nj Fj Cj
     do
@@ -147,9 +150,10 @@ contrainte_complexe() {
 	OR="(or"
 	for l in {0..7}
 	do
-	    if [ $(test_relation_${R} k l) ]
+	    $(test_relation_${R} $k $l) # Le code de retour permet de connaitre le resultat du test
+	    if [ $? -eq 1 ]
 	    then
-		$OR="$OR p${i}_${l}"
+		OR="$OR p${i}_${l}"
 	    fi
 	done
 
@@ -162,7 +166,7 @@ contrainte_complexe() {
 
 # test_relation_N
 # E : k, l (deux positions)
-# S : Retourne 1 si les positions sont sur la meme face et adjacentes, 0 sinon 
+# S : retourne 1 si les positions sont sur la meme face et adjacentes, 0 sinon 
 test_relation_N() {
     k=$1
     l=$2
@@ -171,26 +175,89 @@ test_relation_N() {
 
 # test_relation_F
 # E : k, l (deux positions)
-# S : Retourne 1 si les positions sont sur deux faces opposées, 0 sinon
+# S : retourne 1 si les positions sont sur deux faces opposées, 0 sinon
 test_relation_F() {
     k=$1
     l=$2
+
+    if [[ (($k -eq 0 || $k -eq 1) && ($l -eq 5)) ||                          # Si k est au N alors l est au S
+	  (($k -eq 5) && ($l -eq 0 || $l -eq 1)) ||                          # Si k est au S alors l est au N
+	  (($k -eq 6 || $k -eq 7) && ($l -eq 2 || $l -eq 3 || $l -eq 4)) ||  # Si k est à l'E alors l est à l'W
+	  ((k -eq 2 || $k -eq 3 || $k -eq 4) && ($l -eq 6 || $l -eq 7))  ]]  # Si k est à l'W alors l est à l'E
+    then
+	return 1
+    else
+	return 0
+    fi
 }
+
+
+# # test_relation_F
+# # E : k, l (deux positions)
+# # S : retourne 1 si les positions sont sur deux faces opposées, 0 sinon
+# test_relation_F() {
+#     k=$1
+#     l=$2
+
+#     # Si k est au N alors l est au S
+#     if [[ $k -eq 0 || $k -eq 1 ]]
+#     then
+# 	if [[ $l -eq 5 ]]
+# 	then
+#     	    return 1
+# 	else
+# 	    return 0
+# 	fi
+#     fi
+
+#     # Si k est au S alors l est au N
+#     if [[ $k -eq 5 ]]
+#     then
+#         if [[ $l -eq 0 || $l -eq 1 ]]
+# 	then
+# 	    return 1
+# 	else
+# 	    return 0
+# 	fi
+#     fi
+
+#     # Si k est à l'E alors l est à l'W
+#     if [[ $k -eq 6 || $k -eq 7 ]]
+#     then
+# 	if [[ $l -eq 2 || $l -eq 3 || $l -eq 4 ]]
+# 	then
+# 	    return 1
+# 	else
+# 	    return 0
+# 	fi
+#     fi
+
+#     # Si k est à l'W alors l est à l'E
+#     if [[ $k -eq 2 || $k -eq 3 || $k -eq 4 ]]
+#     then
+# 	if [[ $l -eq 6 || $l -eq 7 ]]
+# 	then
+# 	    return 1
+# 	else
+# 	    return 0
+# 	fi
+#     fi
+# }
 
 
 # test_relation_C
 # E : k, l (deux positions)
-# S : Retourne 1 si les positions sont dans un meme coin, 0 sinon
+# S : retourne 1 si les positions sont dans un meme coin, 0 sinon
 test_relation_C() {
     k=$1
     l=$2
 }
+
 	
        
 ############################
 # Boucle principale (main) #
 ############################
-
 
 if [ $# -ne 8 ]
 then
