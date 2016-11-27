@@ -85,12 +85,11 @@ verification_contrainte() {
 
 
 
-###############
-# Contraintes #
-###############
+#######################
+# Contraintes simples #
+#######################
 
 # $1 = pion_i
-# $2 = pos_j (pour les contraintes complexes Nj, Fj et Cj)
 
 # "Le pion i peut-etre placé à n'importe quelle position"
 # Cela est déjà vérifié par l'assertion placement_1, pas besoin de rajouter une assertion
@@ -123,28 +122,58 @@ contrainte_NE() {
 }
 
 
-contrainte_Nj() {
-    echo "Contrainte Nj"
-    echo "pion_i = $1"
-    echo "pion_j = $2"
+
+#########################
+# Contraintes complexes #
+#########################
+
+# $1 = pion_i
+# $2 = pion_j
+# $3 = type_contrainte
+
+contrainte_complexe() {
+    i=$1
+    j=$2
+    R=$3
+
+    AND="(and"
+
+    for k in {0..7}
+    do
+	OR="(or"
+	for l in {0..7}
+	do
+	    if [ $(test_relation_${R}j k l) ]
+	    then
+		$OR="$OR p${i}_${l}"
+	    fi
+	done
+
+	AND="$AND (implies p${j}_${k} $OR))"
+    done
+
+    echo "(assert $AND))"
 }
 
 
-contrainte_Fj() {
-    echo "Contrainte Fj"
-    echo "pion_i = $1"
-    echo "pion_j = $2"
+test_relation_Nj() {
+    k=$1
+    l=$2
 }
 
 
-contrainte_Cj() {
-    echo "Contrainte Cj"
-    echo "pion_i = $1"
-    echo "pion_j = $2"
+test_relation_Fj() {
+    k=$1
+    l=$2
 }
 
 
-
+test_relation_Cj() {
+    k=$1
+    l=$2
+}
+	
+       
 ############################
 # Boucle principale (main) #
 ############################
@@ -171,7 +200,7 @@ else
 	    # Contrainte complexe
 	    type_contrainte=$(echo $1 | cut -c 1)
 	    pion_j=$(echo $1 | cut -c 2)
-	    contrainte_${type_contrainte}j $pion_i $pion_j
+	    contrainte_complexe $pion_i $pion_j $type_contrainte
 	else
 	    # Contrainte simple
 	    verification_contrainte $1 $pion_i
