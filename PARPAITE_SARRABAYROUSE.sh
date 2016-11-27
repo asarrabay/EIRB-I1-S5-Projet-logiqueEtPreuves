@@ -124,17 +124,23 @@ contrainte_NE() {
 
 
 contrainte_Nj() {
-    echo "TODO Nj"
+    echo "Contrainte Nj"
+    echo "pion_i = $1"
+    echo "pion_j = $2"
 }
 
 
 contrainte_Fj() {
-    echo "TODO Fj"
+    echo "Contrainte Fj"
+    echo "pion_i = $1"
+    echo "pion_j = $2"
 }
 
 
 contrainte_Cj() {
-    echo "TODO Cj"
+    echo "Contrainte Cj"
+    echo "pion_i = $1"
+    echo "pion_j = $2"
 }
 
 
@@ -160,9 +166,18 @@ else
     pion_i=0
     while [ $# -gt 0 ]
     do
-	verification_contrainte $1 $pion_i
-	contrainte_$1 $pion_i
-
+	if [[ $1 =~ ^[NFC][0-7]$ ]]
+	then
+	    # Contrainte complexe
+	    type_contrainte=$(echo $1 | cut -c 1)
+	    pion_j=$(echo $1 | cut -c 2)
+	    contrainte_${type_contrainte}j $pion_i $pion_j
+	else
+	    # Contrainte simple
+	    verification_contrainte $1 $pion_i
+	    contrainte_$1 $pion_i
+	fi
+	
 	pion_i=$(($pion_i+1))
 	shift
     done
