@@ -46,8 +46,7 @@ placement_2() {
     do
 	for j in {0..7}
 	do
-	    
-	    # On réalise une des implications
+	    # Debut : implication, que l'on réalise pour chaque couple (i, j)
 	    AND2="(and"
 	    for k in {0..7}
 	    do
@@ -59,6 +58,7 @@ placement_2() {
 
 	    IMPLIES="(implies p${i}_${j} $AND2))"
 	    AND1="$AND1 $IMPLIES"
+	    # Fin : implication
 	done
     done
 
@@ -83,28 +83,34 @@ verification_contrainte() {
 }
 
 
+# "Le pion i peut-etre placé à n'importe quelle position"
+# Cela est déjà vérifié par l'assertion placement_1, pas besoin de rajouter une assertion
 contrainte_00() {
-    echo "TODO 00"
+    return
 }
 
 
+# "Le pion i est au nord (positions 0 et 1) ou au sud (position 5)"
 contrainte_NS() {
-    echo "TODO NS"   
+    echo "(assert (or p$1_0 p$1_1 p$1_5))"  
 }
 
 
+# "Le pion i est à l'est (positions 2, 3 et 4) ou à l'ouest (positions 6 et 7)"
 contrainte_EW() {
-    echo "TODO EW"
+    echo "(assert (or p$1_2 p$1_3 p$1_4 p$1_6 p$1_7))"  
 }
 
 
+# "Le pion i est au sud (position 5) ou à l'ouest (positions 6 et 7)"
 contrainte_SW() {
-    echo "TODO SW"
+    echo "(assert (or p$1_5 p$1_6 p$1_7))"
 }
 
 
+# "Le pion i est au nord (positions 0 et 1) ou à l'est (positions 2, 3 et 4)"
 contrainte_NE() {
-    echo "TODO NE"
+    echo "(assert (or p$1_0 p$1_1 p$1_2 p$1_3 p$1_4))"  
 }
 
 
@@ -137,11 +143,12 @@ else
 
     # On parcourt l'ensembles des pions 
     # Et pour chacun d'eux on ajoute l'assertion correspondant à leur contrainte
+    # La variable pion_i indique le numéro du pion en cours de traitement
     pion_i=0
     while [ $# -gt 0 ]
     do
 	verification_contrainte $1 $pion_i
-	contrainte_$1
+	contrainte_$1 $pion_i
 
 	pion_i=$(($pion_i+1))
 	shift
