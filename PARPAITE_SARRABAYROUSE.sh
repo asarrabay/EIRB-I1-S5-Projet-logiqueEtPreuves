@@ -11,8 +11,31 @@ usage() {
 
 
 # Ensemble des arrangements de 1 dans 8 (8!)
-declaration_variables() {
+declaration_variables_propositionnelles() {
     echo "(declare-const i Bool)"
+}
+
+
+# Chaque pion est sur au moins une position
+placement_1() {
+    AND="(and"
+    for i in {0..7}
+    do
+	OR="(or"
+	for j in {0..7}
+	do
+	    OR="$OR p${i}_${j}"
+	done
+	AND="$AND $OR)"
+    done
+
+    echo "(assert $AND))" 
+}
+
+
+# Chaque position est occupée par au plus un pion
+placement_2() {
+    echo "TODO"
 }
 
 
@@ -79,7 +102,9 @@ if [ $# -ne 8 ]
 then
     usage
 else
-    declaration_variables
+    declaration_variables_propositionnelles
+    placement_1
+    placement_2
 
     pion_i=0
     while [ $# -gt 0 ]
