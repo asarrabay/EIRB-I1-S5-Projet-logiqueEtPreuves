@@ -1,3 +1,11 @@
+# Fichier : PARPAITE_SARRABAYROUSE.sh
+# Date de dernière édition : dimanche 27 novembre
+# Auteurs : PARPAITE Thibault, SARRABAYROUSE Alexis
+# Description : Script générant le code Z3 permettant d'implémenter le jeu facetious pelican 
+# Dépot Github : https://github.com/basketteur-33/EIRB-I1-S5-Projet-logiqueEtPreuve
+# Exemple de ligne de code à exécuter : ./PARPAITE_SARRABAYROUSE.sh 00 NS EW SW NE N1 F2 C3
+
+
 #!/bin/bash
 
 #############
@@ -190,59 +198,6 @@ test_relation_F() {
 	return 0
     fi
 }
-
-
-# # test_relation_F
-# # E : k, l (deux positions)
-# # S : retourne 1 si les positions sont sur deux faces opposées, 0 sinon
-# test_relation_F() {
-#     k=$1
-#     l=$2
-
-#     # Si k est au N alors l est au S
-#     if [[ $k -eq 0 || $k -eq 1 ]]
-#     then
-# 	if [[ $l -eq 5 ]]
-# 	then
-#     	    return 1
-# 	else
-# 	    return 0
-# 	fi
-#     fi
-
-#     # Si k est au S alors l est au N
-#     if [[ $k -eq 5 ]]
-#     then
-#         if [[ $l -eq 0 || $l -eq 1 ]]
-# 	then
-# 	    return 1
-# 	else
-# 	    return 0
-# 	fi
-#     fi
-
-#     # Si k est à l'E alors l est à l'W
-#     if [[ $k -eq 6 || $k -eq 7 ]]
-#     then
-# 	if [[ $l -eq 2 || $l -eq 3 || $l -eq 4 ]]
-# 	then
-# 	    return 1
-# 	else
-# 	    return 0
-# 	fi
-#     fi
-
-#     # Si k est à l'W alors l est à l'E
-#     if [[ $k -eq 2 || $k -eq 3 || $k -eq 4 ]]
-#     then
-# 	if [[ $l -eq 6 || $l -eq 7 ]]
-# 	then
-# 	    return 1
-# 	else
-# 	    return 0
-# 	fi
-#     fi
-# }
 
 
 # test_relation_C
