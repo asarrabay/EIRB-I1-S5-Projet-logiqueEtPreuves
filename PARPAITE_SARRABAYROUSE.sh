@@ -165,7 +165,14 @@ contrainte_complexe() {
 	    fi
 	done
 
-	AND="$AND (implies p${j}_${k} $OR))"
+	# Cas où on a une implication avec aucune pos valide dans le membre droit : P -> false
+	# Par exemple la position 3 pour la relation coin
+	if [ "$OR" = "(or" ]
+	then
+	    AND="$AND (implies p${j}_${k} false)" 
+	else
+	    AND="$AND (implies p${j}_${k} $OR))"
+	fi
     done
 
     echo "(assert $AND))"
@@ -190,8 +197,8 @@ test_relation_F() {
 
     if [[ (($k -eq 0 || $k -eq 1) && ($l -eq 5)) ||                          # Si k est au N alors l est au S
 	  (($k -eq 5) && ($l -eq 0 || $l -eq 1)) ||                          # Si k est au S alors l est au N
-	  (($k -eq 6 || $k -eq 7) && ($l -eq 2 || $l -eq 3 || $l -eq 4)) ||  # Si k est à l'E alors l est à l'W
-	  ((k -eq 2 || $k -eq 3 || $k -eq 4) && ($l -eq 6 || $l -eq 7))  ]]  # Si k est à l'W alors l est à l'E
+	  (($k -eq 6 || $k -eq 7) && ($l -eq 2 || $l -eq 3 || $l -eq 4)) ||  # Si k est à l'W alors l est à l'E
+	  ((k -eq 2 || $k -eq 3 || $k -eq 4) && ($l -eq 6 || $l -eq 7))  ]]  # Si k est à l'E alors l est à l'W
     then
 	return 1
     else
@@ -206,6 +213,20 @@ test_relation_F() {
 test_relation_C() {
     k=$1
     l=$2
+
+    if [[ ($k -eq 1 && $l -eq 2) || # Coin 1-2
+	  ($k -eq 2 && $l -eq 1) || # Coin 2-1
+	  ($k -eq 4 && $l -eq 5) || # Coin 4-5
+	  ($k -eq 5 && $l -eq 4) || # Coin 5-4
+	  ($k -eq 5 && $l -eq 6) || # Coin 5-6
+	  ($k -eq 6 && $l -eq 5) || # Coin 6-5
+	  ($k -eq 7 && $l -eq 0) || # Coin 7-0
+	  ($k -eq 0 && $l -eq 7) ]] # Coin 0-7
+    then
+	return 1
+    else
+	return 0
+    fi
 }
 
 	
