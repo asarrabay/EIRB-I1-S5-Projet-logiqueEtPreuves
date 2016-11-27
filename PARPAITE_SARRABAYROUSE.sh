@@ -1,7 +1,8 @@
 #!/bin/bash
 
-
-# Fonction
+#############
+# Fonctions #
+#############
 
 usage() {
     echo "usage: $0 c0 c1 ... c7"
@@ -83,6 +84,14 @@ verification_contrainte() {
 }
 
 
+
+###############
+# Contraintes #
+###############
+
+# $1 = pion_i
+# $2 = pos_j (pour les contraintes complexes Nj, Fj et Cj)
+
 # "Le pion i peut-etre placé à n'importe quelle position"
 # Cela est déjà vérifié par l'assertion placement_1, pas besoin de rajouter une assertion
 contrainte_00() {
@@ -129,7 +138,11 @@ contrainte_Cj() {
 }
 
 
-# Boucle principale (main)
+
+############################
+# Boucle principale (main) #
+############################
+
 
 if [ $# -ne 8 ]
 then
