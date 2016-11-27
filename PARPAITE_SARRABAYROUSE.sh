@@ -1,7 +1,7 @@
 # Fichier : PARPAITE_SARRABAYROUSE.sh
 # Date de dernière édition : dimanche 27 novembre
 # Auteurs : PARPAITE Thibault, SARRABAYROUSE Alexis
-# Description : Script générant le code Z3 permettant d'implémenter le jeu facetious pelican 
+# Description : Script générant le code Z3 permettant d'implémenter le jeu facetious pelican
 # Dépot Github : https://github.com/basketteur-33/EIRB-I1-S5-Projet-logiqueEtPreuve
 # Exemple de ligne de code à exécuter : ./PARPAITE_SARRABAYROUSE.sh 00 NS EW SW NE N1 F2 C3
 
@@ -44,7 +44,7 @@ placement_1() {
 	AND="$AND $OR)"
     done
 
-    echo "(assert $AND))" 
+    echo "(assert $AND))"
 }
 
 
@@ -71,7 +71,7 @@ placement_2() {
 	done
     done
 
-    echo "(assert $AND1))"	    
+    echo "(assert $AND1))"
 }
 
 
@@ -113,13 +113,13 @@ contrainte_00() {
 
 # "Le pion i est au nord (positions 0 et 1) ou au sud (position 5)"
 contrainte_NS() {
-    echo "(assert (or p$1_0 p$1_1 p$1_5))"  
+    echo "(assert (or p$1_0 p$1_1 p$1_5))"
 }
 
 
 # "Le pion i est à l'est (positions 2, 3 et 4) ou à l'ouest (positions 6 et 7)"
 contrainte_EW() {
-    echo "(assert (or p$1_2 p$1_3 p$1_4 p$1_6 p$1_7))"  
+    echo "(assert (or p$1_2 p$1_3 p$1_4 p$1_6 p$1_7))"
 }
 
 
@@ -131,7 +131,7 @@ contrainte_SW() {
 
 # "Le pion i est au nord (positions 0 et 1) ou à l'est (positions 2, 3 et 4)"
 contrainte_NE() {
-    echo "(assert (or p$1_0 p$1_1 p$1_2 p$1_3 p$1_4))"  
+    echo "(assert (or p$1_0 p$1_1 p$1_2 p$1_3 p$1_4))"
 }
 
 
@@ -181,11 +181,23 @@ contrainte_complexe() {
 
 # test_relation_N
 # E : k, l (deux positions)
-# S : retourne 1 si les positions sont sur la meme face et adjacentes, 0 sinon 
+# S : retourne 1 si les positions sont sur la meme face et adjacentes, 0 sinon
 test_relation_N() {
     k=$1
     l=$2
+		if [[ (($k -eq 0) && ($l -eq 1)) ||
+		 			(($k -eq 1) && ($l -eq 0)) ||
+					(($k -eq 2 || $k -eq 4) && ($l -eq 3)) ||
+					(($k -eq 3) && ($l -eq 2 || $l -eq 4)) ||
+					(($k -eq 6) && ($l -eq 7)) ||
+					(($k -eq 7) && ($l -eq 6)) ]]
+		then
+			return 1
+		else
+			return 0
+		fi
 }
+
 
 
 # test_relation_F
@@ -229,8 +241,8 @@ test_relation_C() {
     fi
 }
 
-	
-       
+
+
 ############################
 # Boucle principale (main) #
 ############################
@@ -245,7 +257,7 @@ else
     placement_1
     placement_2
 
-    # On parcourt l'ensembles des pions 
+    # On parcourt l'ensembles des pions
     # Et pour chacun d'eux on ajoute l'assertion correspondant à leur contrainte
     # La variable pion_i indique le numéro du pion en cours de traitement
     pion_i=0
@@ -262,16 +274,8 @@ else
 	    verification_contrainte $1 $pion_i
 	    contrainte_$1 $pion_i
 	fi
-	
+
 	pion_i=$(($pion_i+1))
 	shift
     done
 fi
-    
-
-
-
-
-
-
-    
