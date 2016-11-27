@@ -10,11 +10,9 @@ usage() {
 }
 
 
+# Ensemble des arrangements de 1 dans 8 (8!)
 declaration_variables() {
-    for i in 00 NS EW SW NE Nj Fj Cj
-    do
-	echo "(declare-const $i Bool)"
-    done
+    echo "(declare-const i Bool)"
 }
 
 
