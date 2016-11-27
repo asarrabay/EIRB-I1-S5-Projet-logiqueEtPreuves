@@ -67,8 +67,8 @@ placement_2() {
 }
 
 
-# $1 = Code de la contrainte
-# $2 = Position traitée
+# $1 = Contrainte
+# $2 = Position
 verification_contrainte() {
     for i in 00 NS EW SW NE Nj Fj Cj
     do
@@ -89,7 +89,9 @@ verification_contrainte() {
 # Contraintes simples #
 #######################
 
-# $1 = pion_i
+# contrainte_XX
+# E : $1 = pion_i
+# S : vide, affiche l'assertion correspondante
 
 # "Le pion i peut-etre placé à n'importe quelle position"
 # Cela est déjà vérifié par l'assertion placement_1, pas besoin de rajouter une assertion
@@ -127,10 +129,12 @@ contrainte_NE() {
 # Contraintes complexes #
 #########################
 
+# contrainte_complexe
+# E :
 # $1 = pion_i
 # $2 = pion_j
 # $3 = type_contrainte
-
+# S : vide, affiche l'assertion correspondante
 contrainte_complexe() {
     i=$1
     j=$2
@@ -143,7 +147,7 @@ contrainte_complexe() {
 	OR="(or"
 	for l in {0..7}
 	do
-	    if [ $(test_relation_${R}j k l) ]
+	    if [ $(test_relation_${R} k l) ]
 	    then
 		$OR="$OR p${i}_${l}"
 	    fi
@@ -156,19 +160,28 @@ contrainte_complexe() {
 }
 
 
-test_relation_Nj() {
+# test_relation_N
+# E : k, l (deux positions)
+# S : Retourne 1 si les positions sont sur la meme face et adjacentes, 0 sinon 
+test_relation_N() {
     k=$1
     l=$2
 }
 
 
-test_relation_Fj() {
+# test_relation_F
+# E : k, l (deux positions)
+# S : Retourne 1 si les positions sont sur deux faces opposées, 0 sinon
+test_relation_F() {
     k=$1
     l=$2
 }
 
 
-test_relation_Cj() {
+# test_relation_C
+# E : k, l (deux positions)
+# S : Retourne 1 si les positions sont dans un meme coin, 0 sinon
+test_relation_C() {
     k=$1
     l=$2
 }
