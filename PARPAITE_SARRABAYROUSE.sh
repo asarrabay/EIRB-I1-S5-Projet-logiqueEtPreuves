@@ -10,9 +10,15 @@ usage() {
 }
 
 
-# Ensemble des arrangements de 1 dans 8 (8!)
+# Ensemble des positions possibles pour chaque pion
 declaration_variables_propositionnelles() {
-    echo "(declare-const i Bool)"
+    for i in {0..7}
+    do
+	for j in {0..7}
+	do
+	    echo "(declare-const p${i}_${j} Bool)"
+	done
+    done
 }
 
 
@@ -35,7 +41,28 @@ placement_1() {
 
 # Chaque position est occupée par au plus un pion
 placement_2() {
-    echo "TODO"
+    AND1="(and"
+    for i in {0..7}
+    do
+	for j in {0..7}
+	do
+	    
+	    # On réalise une des implications
+	    AND2="(and"
+	    for k in {0..7}
+	    do
+		if [ $k -ne $i ]
+		then
+		    AND2="$AND2 (not p${k}_${j})"
+		fi
+	    done
+
+	    IMPLIES="(implies p${i}_${j} $AND2))"
+	    AND1="$AND1 $IMPLIES"
+	done
+    done
+
+    echo "(assert $AND1))"	    
 }
 
 
@@ -103,9 +130,13 @@ then
     usage
 else
     declaration_variables_propositionnelles
+
+    # Assertions définissant la notion de placement
     placement_1
     placement_2
 
+    # On parcourt l'ensembles des pions 
+    # Et pour chacun d'eux on ajoute l'assertion correspondant à leur contrainte
     pion_i=0
     while [ $# -gt 0 ]
     do
