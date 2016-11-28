@@ -3,7 +3,6 @@
 # Auteurs : PARPAITE Thibault, SARRABAYROUSE Alexis
 # Description : Script générant le code Z3 permettant d'implémenter le jeu facetious pelican
 # Dépot Github : https://github.com/basketteur-33/EIRB-I1-S5-Projet-logiqueEtPreuve
-# Exemple de ligne de code à exécuter : ./PARPAITE_SARRABAYROUSE.sh 00 NS EW SW NE N1 F2 C3
 
 
 #!/bin/bash
@@ -166,7 +165,7 @@ contrainte_complexe() {
 	done
 
 	# Cas où on a une implication avec aucune pos valide dans le membre droit : P -> false
-	# Par exemple la position 3 pour la relation coin
+	# Par exemple la position 3 pour la relation coin, ou le sud pour les voisins
 	if [ "$OR" = "(or" ]
 	then
 	    AND="$AND (implies p${j}_${k} false)" 
@@ -185,17 +184,18 @@ contrainte_complexe() {
 test_relation_N() {
     k=$1
     l=$2
-		if [[ (($k -eq 0) && ($l -eq 1)) ||
-		 			(($k -eq 1) && ($l -eq 0)) ||
-					(($k -eq 2 || $k -eq 4) && ($l -eq 3)) ||
-					(($k -eq 3) && ($l -eq 2 || $l -eq 4)) ||
-					(($k -eq 6) && ($l -eq 7)) ||
-					(($k -eq 7) && ($l -eq 6)) ]]
-		then
-			return 1
-		else
-			return 0
-		fi
+
+    if [[ (($k -eq 0) && ($l -eq 1)) ||              # Voisins au N
+	  (($k -eq 1) && ($l -eq 0)) ||              # Voisins au N
+	  (($k -eq 2 || $k -eq 4) && ($l -eq 3)) ||  # Voisins à l'E
+	  (($k -eq 3) && ($l -eq 2 || $l -eq 4)) ||  # Voisins à l'E
+	  (($k -eq 6) && ($l -eq 7)) ||              # Voisins à l'W
+	  (($k -eq 7) && ($l -eq 6)) ]]              # Voisins à l'W
+    then
+	return 1
+    else
+	return 0
+    fi
 }
 
 
