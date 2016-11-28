@@ -1,5 +1,5 @@
 # EIRB-I1-S5-Projet-logiqueEtPreuve
-PARPAITE Thibault
+PARPAITE Thibault  
 SARRABAYROUSE Alexis
 
 Ce dépot github contient le premier projet de l'UE logique et preuves de programme (I1 - S1).
@@ -17,6 +17,7 @@ On rajoute les lignes permettant de vérifier la solvabilité du problème, et r
 echo -e "(check-sat)\n(get-model)" >> facetious_pelican.smt2
 ```
 
+
 ## Exécution du solveur Z3 
 
 Pour lancer la résolution du problème
@@ -27,6 +28,54 @@ Pour lancer la résolution du problème
 Pour un affichage plus agréable (voir directement les positions) avec grep
 ```
 ./z3 -smt2 facetious_pelican.smt2 | grep true -B 1
+```
+
+
+## Tests
+
+Quelques tests non exhaustifs permettant de vérifier la véracité du générateur
+
+On bloque le pion 1 (pos 3) entre les pions 0 et 2 puis on essaie de mettre le pion 3 dans le coin avec 1 (pos 2) ce qui est impossible
+```
+N1 N2 N1 C1 00 00 00 00
+```
+
+Message affiché :
+```
+unsat
+```
+
+
+On bloque le pion 1 (pos 3) entre les pions 0 et 2 puis on essaie de mettre le pion 3 au SW (ce qui est possible)
+```
+N1 N2 N1 SW 00 00 00 00
+```
+
+Solution proposée :
+```
+  (define-fun p1_3 () Bool
+    true)
+--
+  (define-fun p0_2 () Bool
+    true)
+--
+  (define-fun p4_1 () Bool
+    true)
+--
+  (define-fun p5_0 () Bool
+    true)
+--
+  (define-fun p7_6 () Bool
+    true)
+--
+  (define-fun p3_5 () Bool
+    true)
+--
+  (define-fun p2_4 () Bool
+    true)
+--
+  (define-fun p6_7 () Bool
+    true)
 ```
 
 
