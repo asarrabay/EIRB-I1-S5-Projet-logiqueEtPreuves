@@ -30,6 +30,6 @@ Pour un affichage plus agréable (voir directement les positions) avec grep
 ```
 
 
-PS : Loupiac + foie gras FTW
-PPS : Coucou il est 1h22
+PS : Loupiac + foie gras FTW  
+PPS : Coucou il est 1h22  
 PPPS : R2i <3
