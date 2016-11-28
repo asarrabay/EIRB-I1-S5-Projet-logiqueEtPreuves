@@ -13,7 +13,7 @@
 
 usage() {
     echo "usage: $0 c0 c1 ... c7"
-    echo "cX doit représenter une contrainte : 00, NS,  EW, etc."
+    echo "cX doit représenter une contrainte : 00, NS, EW, etc."
     exit 1
 }
 
